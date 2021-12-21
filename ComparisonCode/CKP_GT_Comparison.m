@@ -15,7 +15,7 @@ clc;
 
 % Assign the ParticipantName variable according to the name you have
 % chosen to report the Kinematics Benchmark results, e.g., UCF_CBL or SFVA
-ParticipantName = 'ABI';
+ParticipantName = 'UCF_CBL';
 
 % Please make sure that the names of the variables in your .mat files still 
 % agree with the names used during the Benchmark. Otherwise, please update 
