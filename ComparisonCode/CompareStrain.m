@@ -8,6 +8,9 @@ function CompareStrain(ParticipantName, Output_dir, CP_ELL, CP_ECC, CP_ERR, ELL_
 % ELL_SNRinf: E_LL for SNR infinite evaluated by participant
 % ECC_SNRinf: E_CC for SNR infinite evaluated by participant
 % ERR_SNRinf: E_RR for SNR infinite evaluated by participant
+% Two types of figures are generated:
+% 1) Strain spatial maps
+% 2) Strain difference boxplots
 
 sizeZ = size(ELL_SNRinf,3);
 
@@ -98,21 +101,21 @@ set(h10,'Position',[200 200 800 800])
 
 sgtitle('Strain Differences') 
 subplot(1,3,1);
-title('ELL difference');
 ELL_diff_tmp_1 = ELL_diff(:,:,1); ELL_diff_tmp_1 = ELL_diff_tmp_1(~isnan(ELL_diff_tmp_1));
 ELL_diff_tmp_2 = ELL_diff(:,:,2); ELL_diff_tmp_2 = ELL_diff_tmp_2(~isnan(ELL_diff_tmp_2));
 ELL_diff_tmp_3 = ELL_diff(:,:,3); ELL_diff_tmp_3 = ELL_diff_tmp_3(~isnan(ELL_diff_tmp_3));
 boxplot([ELL_diff_tmp_1(:), ELL_diff_tmp_2(:), ELL_diff_tmp_3(:)], ....
         'Notch','on','Labels',{'z = 4','z = 12','z = 20'},'Whisker',1);
+ylabel('ELL difference');
 
 subplot(1,3,2);
-title('ECC difference');
 ECC_diff_tmp_1 = ECC_diff(:,:,1); ECC_diff_tmp_1 = ECC_diff_tmp_1(~isnan(ECC_diff_tmp_1));
 ECC_diff_tmp_2 = ECC_diff(:,:,2); ECC_diff_tmp_2 = ECC_diff_tmp_2(~isnan(ECC_diff_tmp_2));
 ECC_diff_tmp_3 = ECC_diff(:,:,3); ECC_diff_tmp_3 = ECC_diff_tmp_3(~isnan(ECC_diff_tmp_3));
 boxplot([ECC_diff_tmp_1(:), ECC_diff_tmp_2(:), ECC_diff_tmp_3(:)], ....
         'Notch','on','Labels',{'z = 4','z = 12','z = 20'},'Whisker',1);
-    
+ylabel('ECC difference');
+
 subplot(1,3,3);
 title('ERR difference');
 ERR_diff_tmp_1 = ERR_diff(:,:,1); ERR_diff_tmp_1 = ERR_diff_tmp_1(~isnan(ERR_diff_tmp_1));
@@ -120,6 +123,7 @@ ERR_diff_tmp_2 = ERR_diff(:,:,2); ERR_diff_tmp_2 = ERR_diff_tmp_2(~isnan(ERR_dif
 ERR_diff_tmp_3 = ERR_diff(:,:,3); ERR_diff_tmp_3 = ERR_diff_tmp_3(~isnan(ERR_diff_tmp_3));
 boxplot([ERR_diff_tmp_1(:), ERR_diff_tmp_2(:), ERR_diff_tmp_3(:)], ....
         'Notch','on','Labels',{'z = 4','z = 12','z = 20'},'Whisker',1);
+ylabel('ERR diference');
 
 saveas(gcf,[Output_dir,'/StrainComp_Boxplot'],'fig');
 

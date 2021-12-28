@@ -11,6 +11,10 @@ function CompareDisp(ParticipantName, Output_dir, CP_dX, CP_dY, CP_dZ, dispX_SNR
 % CP_Xref: Computational phantom sampling points X position in ref configuration 
 % CP_Yref: Computational phantom sampling points Y position in ref configuration 
 % CP_Zref: Computational phantom sampling points Z position in ref configuration 
+% Three types of figures are generated:
+% 1) 3D displacement vectors plot
+% 2) displacement spatial maps
+% 3) displacement difference boxplots
 
 
 %% Step 1 (check #1): 3D Displacement vector
@@ -19,24 +23,39 @@ down_sampling = 5;
 z_loc_color = ['b','g','r'];
 [sizeX, sizeY, sizeZ] = size(dispX_SNRinf);
 
-% Plot Computational phantom and Participant displacements
-for s=1:sizeZ % Slice number - s=1 (apex), s=2 (mid), s=3 (base) 
+% Plot ground-truth and participant's displacements for the computational
+% phantom
+for s=1:sizeZ % Slice number:  s=1 (apex), s=2 (mid), s=3 (base) 
+    
+    % Assign x coordinates for the sampling points
     X_slice = CP_Xref.Xref(:,:,s);    
-    Y_slice = CP_Yref.Yref(:,:,s);    
+    % Assign y coordinates for the sampling points
+    Y_slice = CP_Yref.Yref(:,:,s);  
+    % Assign z coordinates for the sampling points
     Z_slice = CP_Zref.Zref(:,:,s);
     
+    % Assign the ground-truth dX
     dX_GT = CP_dX.dispX(:,:,s);
+    % Assign the ground-truth dY
     dY_GT = CP_dY.dispY(:,:,s);
+    % Assign the ground-truth dZ
     dZ_GT = CP_dZ.dispZ(:,:,s);
     
+    % Assign the participant's calculation for dX
     dX_P = dispX_SNRinf(:,:,s);
+    % Assign the participant's calculation for dY
     dY_P = dispY_SNRinf(:,:,s);
+    % Assign the participant's calculation for dZ
     dZ_P = dispZ_SNRinf(:,:,s);
 
     h1 = figure(1);
-    set(h1,'Position',[10 10 600 600]);
-    title('GT displacement');
+    % Maximize the figure
+    set(h1,'Units','normalized','Position',[0 0 1 1]);
+    %set(h1,'Position',[10 10 600 600]);
+    subplot(1,2,1),
+    title('GT displacement (b:z=4;g:z=12;r:z=20;)');
     hold on;
+    number_of_voxels_GT=0;
     for i = 1:down_sampling:sizeX
         for j = 1:down_sampling:sizeY
             if ( ~isnan(dX_GT(i,j)) )
@@ -44,32 +63,44 @@ for s=1:sizeZ % Slice number - s=1 (apex), s=2 (mid), s=3 (base)
                 % quiver3(X_slice(i,j), Y_slice(i,j), Z_slice(i,j), dX_GT(i,j), dY_GT(i,j), dZ_GT(i,j), 2, z_loc_color(s));
                 plot3(Xg, Yg, Zg, 'o', 'Color', z_loc_color(s));
                 plot3([Xg, Xg+dX_GT(i,j)], [Yg, Yg+dY_GT(i,j)], [Zg, Zg+dZ_GT(i,j)], 'Color', z_loc_color(s));
+                number_of_voxels_GT=number_of_voxels_GT+1;
             end
         end
     end
-    view(90,45)
+    view(90,45);
+    xlabel('X');
+    ylabel('Y');
+    zlabel('Z');
+    axis([-40 40 -40 40 0 25]);
     hold off;
     
-    h2 = figure(2);
-    set(h2,'Position',[610 10 600 600]);
-    title('Participant displacement');
+    %h2 = figure(2);
+    %set(h2,'Position',[610 10 600 600]);
+    subplot(1,2,2);
+    title('Participant displacement (b:z=4;g:z=12;r:z=20;)');
     hold on;
+    number_of_voxels_P=0;
     for i = 1:down_sampling:sizeX
         for j = 1:down_sampling:sizeY
             if ( ~isnan(dX_P(i,j)) )
                 Xg = X_slice(i,j); Yg = Y_slice(i,j); Zg = Z_slice(i,j);
                 % quiver3(X_slice(i,j), Y_slice(i,j), Z_slice(i,j), dX_P(i,j), dY_P(i,j), dZ_P(i,j), 2, z_loc_color(s));
-                plot3(Xg, Yg, Zg, 'o', 'Color', z_loc_color(s));
+                plot3(Xg, Yg, Zg, 'o', 'Color', z_loc_color(s),'MarkerFaceColor',z_loc_color(s));
                 plot3([Xg, Xg+dX_P(i,j)], [Yg, Yg+dY_P(i,j)], [Zg, Zg+dZ_P(i,j)], 'Color', z_loc_color(s));
+                number_of_voxels_P=number_of_voxels_P+1;
             end
         end
     end
     view(90,45)
     hold off;
+    xlabel('X');
+    ylabel('Y');
+    zlabel('Z');
+    axis([-40 40 -40 40 0 25]);
 end
-
-fprintf('-----> Step 2: Plot 3D displacement vectors completed ......\n');
-
+% Save the last quiver plot to be included in the comparison report
+saveas(h1,[Output_dir,'/Displacement_comparison_3D'],'fig');
+fprintf('-----> Step 2(a): Plot 3D displacement vectors completed ......\n');
 
 
 %% Step 2 (Check #2): Displacement spatial map
@@ -87,7 +118,7 @@ for s = 1:sizeZ % Slice number - s=1 (apex), s=2 (mid), s=3 (base)
     Y_slice = CP_Yref.Yref(:,:,s);    
     Z_slice = CP_Zref.Zref(:,:,s);
     
-    % Start to plot displacement spatial maps
+    % Plot displacement spatial maps
     % subplots 1-3: ground-truth dX, dY, dZ
     % subplots 4-6: participant's results for dX, dY, dZ
     % subplots 7-9: difference in dX, dY, dZ
@@ -156,40 +187,44 @@ for s = 1:sizeZ % Slice number - s=1 (apex), s=2 (mid), s=3 (base)
     saveas(gcf,[Output_dir,'/DispComp_slice',num2str(s)],'fig');
 
 end
+fprintf('-----> Step 2(b): Plot displacement maps completed ......\n');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Step 3 (Check #3): Displacement difference boxplot
 h6 = figure(6);
 set(h6,'Position',[200 200 800 800])
 
-sgtitle('Displacement Differences') 
+sgtitle('Displacement Differences Boxplots') 
 subplot(1,3,1);
-title('dX difference');
 dispX_diff_tmp_1 = dispX_diff(:,:,1); dispX_diff_tmp_1 = dispX_diff_tmp_1(~isnan(dispX_diff_tmp_1));
 dispX_diff_tmp_2 = dispX_diff(:,:,2); dispX_diff_tmp_2 = dispX_diff_tmp_2(~isnan(dispX_diff_tmp_2));
 dispX_diff_tmp_3 = dispX_diff(:,:,3); dispX_diff_tmp_3 = dispX_diff_tmp_3(~isnan(dispX_diff_tmp_3));
 boxplot([dispX_diff_tmp_1(:), dispX_diff_tmp_2(:), dispX_diff_tmp_3(:)], ....
         'Notch','on','Labels',{'z = 4','z = 12','z = 20'},'Whisker',1);
+ylabel('dX difference');
+set(gca,'FontSize',14);
 
 subplot(1,3,2);
-title('dY difference');
 dispY_diff_tmp_1 = dispY_diff(:,:,1); dispY_diff_tmp_1 = dispY_diff_tmp_1(~isnan(dispY_diff_tmp_1));
 dispY_diff_tmp_2 = dispY_diff(:,:,2); dispY_diff_tmp_2 = dispY_diff_tmp_2(~isnan(dispY_diff_tmp_2));
 dispY_diff_tmp_3 = dispY_diff(:,:,3); dispY_diff_tmp_3 = dispY_diff_tmp_3(~isnan(dispY_diff_tmp_3));
 boxplot([dispY_diff_tmp_1(:), dispY_diff_tmp_2(:), dispY_diff_tmp_3(:)], ....
         'Notch','on','Labels',{'z = 4','z = 12','z = 20'},'Whisker',1);
-    
+ylabel('dY difference');
+set(gca,'FontSize',14);
+
 subplot(1,3,3);
-title('dZ difference');
 dispZ_diff_tmp_1 = dispZ_diff(:,:,1); dispZ_diff_tmp_1 = dispZ_diff_tmp_1(~isnan(dispZ_diff_tmp_1));
 dispZ_diff_tmp_2 = dispZ_diff(:,:,2); dispZ_diff_tmp_2 = dispZ_diff_tmp_2(~isnan(dispZ_diff_tmp_2));
 dispZ_diff_tmp_3 = dispZ_diff(:,:,3); dispZ_diff_tmp_3 = dispZ_diff_tmp_3(~isnan(dispZ_diff_tmp_3));
 boxplot([dispZ_diff_tmp_1(:), dispZ_diff_tmp_2(:), dispZ_diff_tmp_3(:)], ....
         'Notch','on','Labels',{'z = 4','z = 12','z = 20'},'Whisker',1);
+ylabel('dZ difference');
+set(gca,'FontSize',14);
 
 saveas(gcf,[Output_dir,'/DispComp_Boxplot'],'fig');
 
-
+fprintf('-----> Step 2(c): Plot displacement difference boxplot completed ......\n');
 
 
 

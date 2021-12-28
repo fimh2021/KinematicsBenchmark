@@ -22,14 +22,28 @@ Par.Bold = true;
 append(htmlDoc, Par);
     
 
-
 %% Displacement comparison
+% 3D displacement vectors plot
+Par = Paragraph('GT Vs Participant''s Displacement (3D plot)');
+Par.Bold = true;
+Par.FontSize = ['18'];
+append(htmlDoc, Par);
+input_fig = openfig([ResultsDirectory,'Displacement_comparison_3D.fig']);
+set(gcf,'units','normalized','position',[0 0 1.0 1.0]);
+input_fig = get(groot,'CurrentFigure');
+% Save the figure as an image
+output_image = [ResultsDirectory,'Displacement_comparison_3D.png'];
+saveas(gcf, output_image, 'png');
+% Add image to report
+mlreportgen.dom.Height.Value = '0.5in';
+append(htmlDoc, Image(output_image));
+    
 % Displacment maps %
-SlicePos = ['z = 4 '; 'z = 12'; 'z = 20'];
+SlicePos = {'z = 4 '; 'z = 12'; 'z = 20'};
 for s = 1:sizeZ
     
     % Define a plot
-    Par = Paragraph(['Displacement comparison (spatial maps) ',SlicePos(s)]);
+    Par = Paragraph(['Displacement comparison (spatial maps) ',SlicePos{s}]);
     Par.Bold = true;
     Par.FontSize = ['18'];
     append(htmlDoc, Par);
@@ -74,7 +88,7 @@ close all;
 for s = 1:sizeZ
     
     % Define a plot
-    Par = Paragraph(['Strain comparison (spatial maps) ',SlicePos(s)]);
+    Par = Paragraph(['Strain comparison (spatial maps) ',SlicePos{s}]);
     Par.Bold = true;
     Par.FontSize = ['18'];
     append(htmlDoc, Par);

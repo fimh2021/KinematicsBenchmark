@@ -5,9 +5,14 @@
 
 % Authors: Vicky Wang and Luigi Perotti
 
-% Note: before running this script, please load the Participants results in
-% the "ParticipantResults/participantID" folder and ensure the data is 
-% stored according to the format specified in the Benchmark Instruction.
+% Note: before running this script, please follow the instructions listed below:
+% 1) generate a subfolder under the "ParticipantResults" folder using your participant ID. 
+% 2) load the participant's results in the "ParticipantResults/participantID" folder 
+% and ensure the data is stored according to the format specified in the Benchmark Instruction.
+% 3) enter your participant ID at line 23, for example, UCF_CBL. 
+% Please make sure that the names of the variables in your .mat files still 
+% agree with the names used during the Benchmark. Otherwise, please update 
+% them in the LoadDispData.m and LoadStrainData.m functions.
 
 clear all;
 close all;
@@ -15,13 +20,7 @@ clc;
 
 % Assign the ParticipantName variable according to the name you have
 % chosen to report the Kinematics Benchmark results, e.g., UCF_CBL or SFVA
-ParticipantName = 'UCF_CBL';
-
-% Please make sure that the names of the variables in your .mat files still 
-% agree with the names used during the Benchmark. Otherwise, please update 
-% them in the LoadDispData and LoadStrainData functions.
-
-
+ParticipantName = 'ABI';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%% Ground-truth displacements %%%%%%%%%%%%%%%
@@ -46,7 +45,6 @@ CP_ERR = load([GT_dir,'/CP_ERR.mat']);
 fprintf('-----> Step 1(b): Load ground-truth strains completed ......\n');
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%% Participant's results %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -64,14 +62,11 @@ if ~exist(Output_dir)
     mkdir(Output_dir);
 end
 
-
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%% Check participant's results: displacement %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fprintf('-----> Step 2: Plot differences in displacements ......\n');
 CompareDisp(ParticipantName, Output_dir, CP_dX, CP_dY, CP_dZ, dispX_SNRinf, dispY_SNRinf, dispZ_SNRinf, CP_Xref, CP_Yref, CP_Zref);
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,7 +76,6 @@ fprintf('-----> Step 3: Plot strain differences ......\n');
 CompareStrain(ParticipantName, Output_dir, CP_ELL, CP_ECC, CP_ERR, ELL_SNRinf, ECC_SNRinf, ERR_SNRinf);
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%% Generate html report %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -89,6 +83,9 @@ fprintf('-----> Step 4: Generating html report ......\n');
 GenerateComparisonReport(size(dispX_SNRinf,3), ParticipantName);
 
 
+fprintf('-----> Steps completed: please check your comparison html report ......\n');
+
+return
 
 
 
