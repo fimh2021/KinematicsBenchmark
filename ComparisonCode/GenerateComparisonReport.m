@@ -24,7 +24,7 @@ append(htmlDoc, Par);
 
 %% Displacement comparison
 % 3D displacement vectors plot
-Par = Paragraph('GT Vs Participant''s Displacement (3D plot)');
+Par = Paragraph('GT vs Participant''s Displacement (3D plot)');
 Par.Bold = true;
 Par.FontSize = ['18'];
 append(htmlDoc, Par);

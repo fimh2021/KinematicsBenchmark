@@ -13,8 +13,8 @@ function CompareDisp(ParticipantName, Output_dir, CP_dX, CP_dY, CP_dZ, dispX_SNR
 % CP_Zref: Computational phantom sampling points Z position in ref configuration 
 % Three types of figures are generated:
 % 1) 3D displacement vectors plot
-% 2) displacement spatial maps
-% 3) displacement difference boxplots
+% 2) Displacement spatial maps
+% 3) Displacement difference boxplots
 
 
 %% Step 1 (check #1): 3D Displacement vector
@@ -27,31 +27,31 @@ z_loc_color = ['b','g','r'];
 % phantom
 for s=1:sizeZ % Slice number:  s=1 (apex), s=2 (mid), s=3 (base) 
     
-    % Assign x coordinates for the sampling points
+    % X coordinates for the sampling points
     X_slice = CP_Xref.Xref(:,:,s);    
-    % Assign y coordinates for the sampling points
+    % Y coordinates for the sampling points
     Y_slice = CP_Yref.Yref(:,:,s);  
-    % Assign z coordinates for the sampling points
+    % Z coordinates for the sampling points
     Z_slice = CP_Zref.Zref(:,:,s);
     
-    % Assign the ground-truth dX
+    % Ground-truth dX
     dX_GT = CP_dX.dispX(:,:,s);
-    % Assign the ground-truth dY
+    % Ground-truth dY
     dY_GT = CP_dY.dispY(:,:,s);
-    % Assign the ground-truth dZ
+    % Ground-truth dZ
     dZ_GT = CP_dZ.dispZ(:,:,s);
     
-    % Assign the participant's calculation for dX
+    % Participant's calculation for dX
     dX_P = dispX_SNRinf(:,:,s);
-    % Assign the participant's calculation for dY
+    % Participant's calculation for dY
     dY_P = dispY_SNRinf(:,:,s);
-    % Assign the participant's calculation for dZ
+    % Participant's calculation for dZ
     dZ_P = dispZ_SNRinf(:,:,s);
 
     h1 = figure(1);
     % Maximize the figure
     set(h1,'Units','normalized','Position',[0 0 1 1]);
-    %set(h1,'Position',[10 10 600 600]);
+    % set(h1,'Position',[10 10 600 600]);
     subplot(1,2,1),
     title('GT displacement (b:z=4;g:z=12;r:z=20;)');
     hold on;
@@ -74,8 +74,8 @@ for s=1:sizeZ % Slice number:  s=1 (apex), s=2 (mid), s=3 (base)
     axis([-40 40 -40 40 0 25]);
     hold off;
     
-    %h2 = figure(2);
-    %set(h2,'Position',[610 10 600 600]);
+    % h2 = figure(2);
+    % set(h2,'Position',[610 10 600 600]);
     subplot(1,2,2);
     title('Participant displacement (b:z=4;g:z=12;r:z=20;)');
     hold on;
@@ -98,7 +98,7 @@ for s=1:sizeZ % Slice number:  s=1 (apex), s=2 (mid), s=3 (base)
     zlabel('Z');
     axis([-40 40 -40 40 0 25]);
 end
-% Save the last quiver plot to be included in the comparison report
+% Save the displacment plot to be included in the comparison report
 saveas(h1,[Output_dir,'/Displacement_comparison_3D'],'fig');
 fprintf('-----> Step 2(a): Plot 3D displacement vectors completed ......\n');
 
@@ -224,7 +224,7 @@ set(gca,'FontSize',14);
 
 saveas(gcf,[Output_dir,'/DispComp_Boxplot'],'fig');
 
-fprintf('-----> Step 2(c): Plot displacement difference boxplot completed ......\n');
+fprintf('-----> Step 2(c): Plot displacement differences completed ......\n');
 
 
 

@@ -95,7 +95,7 @@ for s = 1:sizeZ % Slice number - s=1 (apex), s=2 (mid), s=3 (base)
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Step 3 (Check #3): Displacement difference boxplot
+% Step 3 (Check #3): Displacement differences boxplot
 h10 = figure(10);
 set(h10,'Position',[200 200 800 800])
 

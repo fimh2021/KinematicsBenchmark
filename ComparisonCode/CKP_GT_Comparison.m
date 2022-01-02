@@ -5,11 +5,14 @@
 
 % Authors: Vicky Wang and Luigi Perotti
 
-% Note: before running this script, please follow the instructions listed below:
-% 1) generate a subfolder under the "ParticipantResults" folder using your participant ID. 
-% 2) load the participant's results in the "ParticipantResults/participantID" folder 
-% and ensure the data is stored according to the format specified in the Benchmark Instruction.
-% 3) enter your participant ID at line 23, for example, UCF_CBL. 
+% Note: before running this script, please follow the instructions listed 
+% below:
+% 1) Generate a subfolder under the "ParticipantResults" folder using your 
+% participant ID. 
+% 2) Load the participant's results in the "ParticipantResults/participantID" 
+% folder and ensure the data is stored according to the format specified in 
+% the Benchmark Instructions.
+% 3) Enter your participant ID at line 26, for example, UCF_CBL or SFVA. 
 % Please make sure that the names of the variables in your .mat files still 
 % agree with the names used during the Benchmark. Otherwise, please update 
 % them in the LoadDispData.m and LoadStrainData.m functions.
@@ -20,7 +23,7 @@ clc;
 
 % Assign the ParticipantName variable according to the name you have
 % chosen to report the Kinematics Benchmark results, e.g., UCF_CBL or SFVA
-ParticipantName = 'ABI';
+ParticipantName = 'UCF_CBL';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%% Ground-truth displacements %%%%%%%%%%%%%%%
@@ -85,7 +88,7 @@ GenerateComparisonReport(size(dispX_SNRinf,3), ParticipantName);
 
 fprintf('-----> Steps completed: please check your comparison html report ......\n');
 
-return
+
 
 
 
