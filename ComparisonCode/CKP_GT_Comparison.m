@@ -40,13 +40,16 @@ CP_Xref = load([GT_dir,'/CP_Xref.mat']);
 CP_Yref = load([GT_dir,'/CP_Yref.mat']);
 CP_Zref = load([GT_dir,'/CP_Zref.mat']);
 fprintf('-----> Step 1(a): Load ground-truth displacements completed ......\n');
+f = waitbar(0.1,'Step 1(a): Load ground-truth displacements completed','WindowStyle','normal');
+pause(.5);
 
 % Step 1(b): Load ground-truth strains
 CP_ECC = load([GT_dir,'/CP_ECC.mat']);
 CP_ELL = load([GT_dir,'/CP_ELL.mat']);
 CP_ERR = load([GT_dir,'/CP_ERR.mat']);
 fprintf('-----> Step 1(b): Load ground-truth strains completed ......\n');
-
+waitbar(0.2,f,'Step 1(b): Load ground-truth strains completed','WindowStyle','normal');
+pause(.5);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%% Participant's results %%%%%%%%%%%%%%%
@@ -55,9 +58,13 @@ fprintf('-----> Step 1(b): Load ground-truth strains completed ......\n');
 % Load displacement data
 [dispX_SNRinf, dispY_SNRinf, dispZ_SNRinf] = LoadDispData(ParticipantName);
 fprintf('-----> Step 1(c): Load participant displacement results completed ......\n');
+waitbar(0.3,f,'Step 1(c): Load participant displacement results completed','WindowStyle','normal');
+pause(.5);
 % Load strain data
 [ELL_SNRinf, ECC_SNRinf, ERR_SNRinf] = LoadStrainData(ParticipantName);
 fprintf('-----> Step 1(d): Load participant strain results completed ......\n');
+waitbar(0.4,f,'Step 1(d): Load participant strain results completed','WindowStyle','normal');
+pause(.5);
 
 % Create an output directory to store figures
 Output_dir = [ParticipantName,'_ComparisonFigures'];
@@ -69,24 +76,24 @@ end
 %%%%%%%%%%%%%%% Check participant's results: displacement %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fprintf('-----> Step 2: Plot differences in displacements ......\n');
-CompareDisp(ParticipantName, Output_dir, CP_dX, CP_dY, CP_dZ, dispX_SNRinf, dispY_SNRinf, dispZ_SNRinf, CP_Xref, CP_Yref, CP_Zref);
-
+f=CompareDisp(ParticipantName, Output_dir, CP_dX, CP_dY, CP_dZ, dispX_SNRinf, dispY_SNRinf, dispZ_SNRinf, CP_Xref, CP_Yref, CP_Zref,f);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%% Check participant's results: strain %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fprintf('-----> Step 3: Plot strain differences ......\n');
-CompareStrain(ParticipantName, Output_dir, CP_ELL, CP_ECC, CP_ERR, ELL_SNRinf, ECC_SNRinf, ERR_SNRinf);
-
+f=CompareStrain(ParticipantName, Output_dir, CP_ELL, CP_ECC, CP_ERR, ELL_SNRinf, ECC_SNRinf, ERR_SNRinf,f);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%% Generate html report %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fprintf('-----> Step 4: Generating html report ......\n');
 GenerateComparisonReport(size(dispX_SNRinf,3), ParticipantName);
-
+waitbar(1.0,f,'Step 4: Generating html report completed','WindowStyle','normal');
 
 fprintf('-----> Steps completed: please check your comparison html report ......\n');
+f = msgbox('Steps completed: please check your comparison html report');
+close all;
 
 
 

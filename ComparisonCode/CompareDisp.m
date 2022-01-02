@@ -1,4 +1,4 @@
-function CompareDisp(ParticipantName, Output_dir, CP_dX, CP_dY, CP_dZ, dispX_SNRinf, dispY_SNRinf, dispZ_SNRinf, CP_Xref, CP_Yref, CP_Zref)
+function f=CompareDisp(ParticipantName, Output_dir, CP_dX, CP_dY, CP_dZ, dispX_SNRinf, dispY_SNRinf, dispZ_SNRinf, CP_Xref, CP_Yref, CP_Zref,f)
 
 % This function is designed to plot the differences between ground-truth 
 % and participant's displacements
@@ -74,8 +74,6 @@ for s=1:sizeZ % Slice number:  s=1 (apex), s=2 (mid), s=3 (base)
     axis([-40 40 -40 40 0 25]);
     hold off;
     
-    % h2 = figure(2);
-    % set(h2,'Position',[610 10 600 600]);
     subplot(1,2,2);
     title('Participant displacement (b:z=4;g:z=12;r:z=20;)');
     hold on;
@@ -101,7 +99,9 @@ end
 % Save the displacment plot to be included in the comparison report
 saveas(h1,[Output_dir,'/Displacement_comparison_3D'],'fig');
 fprintf('-----> Step 2(a): Plot 3D displacement vectors completed ......\n');
-
+waitbar(0.5,f,'Step 2(a): Plot 3D displacement vectors completed','WindowStyle','modal');
+pause(.5);
+close all;
 
 %% Step 2 (Check #2): Displacement spatial map
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -124,7 +124,7 @@ for s = 1:sizeZ % Slice number - s=1 (apex), s=2 (mid), s=3 (base)
     % subplots 7-9: difference in dX, dY, dZ
     
     hs = figure(2+s);
-    set(hs,'Position',[200 200 800 800])
+    set(hs,'Units','normalized','Position',[0 0 1 1]);
     sgtitle([SlicePos(s,:),' slice']) 
     %%%%%%%%%%%%%%%%%%%% GT solutions %%%%%%%%%%%%%%%%%%%%
     subplot(3,3,1),imagesc(CP_dX.dispX(:,:,s));
@@ -188,11 +188,13 @@ for s = 1:sizeZ % Slice number - s=1 (apex), s=2 (mid), s=3 (base)
 
 end
 fprintf('-----> Step 2(b): Plot displacement maps completed ......\n');
+waitbar(0.55,f,'Step 2(b): Plot displacement maps completed','WindowStyle','modal');
+pause(.5);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Step 3 (Check #3): Displacement difference boxplot
 h6 = figure(6);
-set(h6,'Position',[200 200 800 800])
+set(h6,'Units','normalized','Position',[0 0 1 1]);
 
 sgtitle('Displacement Differences Boxplots') 
 subplot(1,3,1);
@@ -223,11 +225,13 @@ ylabel('dZ difference');
 set(gca,'FontSize',14);
 
 saveas(gcf,[Output_dir,'/DispComp_Boxplot'],'fig');
+close all;
 
-fprintf('-----> Step 2(c): Plot displacement differences completed ......\n');
+fprintf('-----> Step 2(c): Displacement differences boxplots completed ......\n');
+waitbar(0.6,f,'Step 2(c): Displacement differences boxplots completed','WindowStyle','modal');
+pause(.5);
 
-
-
+return
 
 
 

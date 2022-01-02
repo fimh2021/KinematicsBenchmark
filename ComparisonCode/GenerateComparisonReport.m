@@ -14,7 +14,7 @@ open(htmlDoc);
 ResultsDirectory = [ParticipantName,'_ComparisonFigures/'];
 
 % Write a brief introduction
-Par = Paragraph(['This report summarizes the comparison between the computational phantom ground truth and the participant''s results']);
+Par = Paragraph(['This report summarizes the comparison between the computational phantom ground truth solutions and the participant''s results']);
 Par.FontSize = ['20'];
 Par.Color = ['blue'];
 Par.BackgroundColor = ['yellow'];
@@ -65,6 +65,10 @@ for s = 1:sizeZ
 end
 
 % Displacment box plots %
+Par = Paragraph('Boxplots of displacement differences for overlapping voxels only');
+Par.Bold = true;
+Par.FontSize = ['18'];
+append(htmlDoc, Par);
 
 % Load image to be appended to the report
 input_fig = openfig([ResultsDirectory,'DispComp_Boxplot.fig']);
@@ -110,6 +114,10 @@ for s = 1:sizeZ
 end
     
 % Strain box plots %
+Par = Paragraph('Boxplots of axial strain differences for overlapping voxels only');
+Par.Bold = true;
+Par.FontSize = ['18'];
+append(htmlDoc, Par);
 
 % Load image to be appended to the report
 input_fig = openfig([ResultsDirectory,'StrainComp_Boxplot.fig']);

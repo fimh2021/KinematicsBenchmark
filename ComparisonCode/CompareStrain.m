@@ -1,4 +1,4 @@
-function CompareStrain(ParticipantName, Output_dir, CP_ELL, CP_ECC, CP_ERR, ELL_SNRinf, ECC_SNRinf, ERR_SNRinf);
+function f=CompareStrain(ParticipantName, Output_dir, CP_ELL, CP_ECC, CP_ERR, ELL_SNRinf, ECC_SNRinf, ERR_SNRinf,f);
 
 % This function is designed to plot the differences between ground-truth 
 % and participant's longitudinal, circumferential, and radial strains
@@ -30,7 +30,7 @@ for s = 1:sizeZ % Slice number - s=1 (apex), s=2 (mid), s=3 (base)
     % subplots 7-9: difference in ELL, ECC, ERR
     
     hs = figure(6+s);
-    set(hs,'Position',[200 200 800 800])
+    set(hs,'Units','normalized','Position',[0 0 1 1]);
     sgtitle([SlicePos(s,:),' slice']) 
     %%%%%%%%%%%%%%%%%%%% GT solutions %%%%%%%%%%%%%%%%%%%%
     subplot(3,3,1),imagesc(CP_ELL.ELL(:,:,s));
@@ -94,10 +94,13 @@ for s = 1:sizeZ % Slice number - s=1 (apex), s=2 (mid), s=3 (base)
     
 end
 
+waitbar(0.7,f,'Step 3(a): Plot strain difference maps completed','WindowStyle','modal');
+pause(.5);
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Step 3 (Check #3): Displacement differences boxplot
 h10 = figure(10);
-set(h10,'Position',[200 200 800 800])
+set(h10,'Units','normalized','Position',[0 0 1 1]);
 
 sgtitle('Strain Differences') 
 subplot(1,3,1);
@@ -124,8 +127,14 @@ ERR_diff_tmp_3 = ERR_diff(:,:,3); ERR_diff_tmp_3 = ERR_diff_tmp_3(~isnan(ERR_dif
 boxplot([ERR_diff_tmp_1(:), ERR_diff_tmp_2(:), ERR_diff_tmp_3(:)], ....
         'Notch','on','Labels',{'z = 4','z = 12','z = 20'},'Whisker',1);
 ylabel('ERR diference');
-
 saveas(gcf,[Output_dir,'/StrainComp_Boxplot'],'fig');
+close all;
+
+waitbar(0.75,f,'Step 3(b): Strain differences boxplots completed','WindowStyle','modal');
+pause(.5);
+
+return
+
 
 
 
